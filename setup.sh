@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # ==========================================
-# Fail2Ban Setup für CloudPanel (Nginx)
+# Fail2Ban Auto-Setup für CloudPanel (Nginx)
+# Version: 1.2 (Optimized)
 # ==========================================
 
-# Farben für hübsche Ausgabe
+# Farben für Ausgabe
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
@@ -23,11 +24,7 @@ echo -e "${GREEN}[1/5] Installiere notwendige Pakete...${NC}"
 apt-get update -qq
 apt-get install -y fail2ban iptables -qq
 
-# 3. Filter Definition (Die "Intelligenz")
-# Erkennt: 
-# - HTTP Fehler (4xx, 5xx)
-# - Scans nach sensiblen Dateien (.env, .git, etc.)
-# - Den spezifischen Angriff "POST /adfa"
+# 3. Filter Definition
 echo -e "${GREEN}[2/5] Erstelle Filter-Regeln (cloudpanel-dos.conf)...${NC}"
 cat <<EOF > /etc/fail2ban/filter.d/nginx-cloudpanel-dos.conf
 [Definition]
@@ -37,29 +34,23 @@ failregex = ^<HOST> -.*"(GET|POST|HEAD).*" (400|401|403|404|444|499|500|502|503|
             ^<HOST> -.*"POST /xmlrpc.php .*" .*$
 
 ignoreregex = 
-# Hier kannst du bei Bedarf Google Bots ausschließen, falls nötig
-# .*Googlebot.*
 EOF
 
-# 4. Jail Konfiguration (Das "Gefängnis")
-# Überwacht ALLE User im CloudPanel (/home/*/...)
+# 4. Jail Konfiguration
 echo -e "${GREEN}[3/5] Konfiguriere Jail (Jail.local)...${NC}"
 cat <<EOF > /etc/fail2ban/jail.d/nginx-cloudpanel.conf
 [nginx-cloudpanel-dos]
-enabled = true
-port    = http,https
-filter  = nginx-cloudpanel-dos
-# Wildcard * findet alle CloudPanel User (z.B. m4rkus28, user2, etc.)
-logpath = /home/*/logs/nginx/access.log
+enabled  = true
+# WICHTIG: 'auto' verhindert Warnungen bzgl. systemd/journalmatch und nutzt Datei-Polling
+backend  = auto
+port     = http,https
+filter   = nginx-cloudpanel-dos
+# Wildcard * findet alle CloudPanel User Logs
+logpath  = /home/*/logs/nginx/access.log
 maxretry = 5
 findtime = 60
 bantime  = 3600
-# Falls du jemals die Ban-Zeit erhöhen willst:
-# bantime = 86400  ; 1 Tag
-# bantime = 604800 ; 1 Woche
-
-# CloudPanel nutzt oft UFW oder iptables direkt. Multiport ist sicher.
-action  = iptables-multiport[name=NoDos, port="http,https"]
+action   = iptables-multiport[name=NoDos, port="http,https"]
 EOF
 
 # 5. Service aktivieren und starten
@@ -67,7 +58,7 @@ echo -e "${GREEN}[4/5] Aktiviere Autostart und lade Dienste neu...${NC}"
 systemctl enable fail2ban
 systemctl restart fail2ban
 
-# Kurze Pause damit der Socket da ist
+# Kurze Pause
 sleep 2
 
 # 6. Status-Check

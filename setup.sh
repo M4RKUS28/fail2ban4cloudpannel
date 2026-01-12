@@ -50,7 +50,7 @@ filter   = nginx-cloudpanel-dos
 # Wildcard * findet alle CloudPanel User Logs UND das globale Log
 logpath  = /home/*/logs/nginx/access.log
            /var/log/nginx/access.log
-maxretry = 5
+maxretry = 10
 findtime = 60
 bantime  = 3600
 # Falls du jemals die Ban-Zeit erhöhen willst:

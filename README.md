@@ -26,4 +26,3 @@ Es schützt vor Bot-Netzwerken, DOS-Angriffen und Scannern, indem es Angreifer a
 ## 📝 Konfiguration anpassen
 Die Einstellungen (Bann-Dauer, Versuche) befinden sich nach der Installation in:
 `/etc/fail2ban/jail.d/nginx-cloudpanel.conf`
-```

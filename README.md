@@ -3,21 +3,9 @@ Hier ist eine saubere, kurze `README.md`, die du zusammen mit dem Skript speiche
 ```markdown
 # 🛡️ Fail2Ban Auto-Setup für CloudPanel
 
-Dieses Skript installiert und konfiguriert Fail2Ban automatisch auf **CloudPanel** (Nginx/Ubuntu) Servern. Es schützt vor Bot-Netzwerken, DOS-Angriffen und Scannern, indem es Angreifer auf Firewall-Ebene blockiert.
-
-## 🚀 Installation
-
-1. **Skript erstellen:**
-   ```bash
-   nano install_secure.sh
-   ```
-   *(Skript-Inhalt einfügen und speichern)*
-
-2. **Ausführbar machen & Starten:**
-   ```bash
-   chmod +x install_secure.sh
-   sudo ./install_secure.sh
-   ```
+Dieses Skript installiert und konfiguriert Fail2Ban automatisch auf **CloudPanel** (Nginx/Ubuntu) Servern.
+Es schützt vor Bot-Netzwerken, DOS-Angriffen und Scannern, indem es Angreifer auf Firewall-Ebene blockiert.
+```
 
 ## ⚙️ Features
 - ✅ **Installation:** Installiert Fail2Ban & IPtables automatisch.

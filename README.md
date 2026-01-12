@@ -1,11 +1,9 @@
-Hier ist eine saubere, kurze `README.md`, die du zusammen mit dem Skript speichern kannst.
 
-```markdown
 # 🛡️ Fail2Ban Auto-Setup für CloudPanel
 
 Dieses Skript installiert und konfiguriert Fail2Ban automatisch auf **CloudPanel** (Nginx/Ubuntu) Servern.
 Es schützt vor Bot-Netzwerken, DOS-Angriffen und Scannern, indem es Angreifer auf Firewall-Ebene blockiert.
-```
+
 
 ## ⚙️ Features
 - ✅ **Installation:** Installiert Fail2Ban & IPtables automatisch.

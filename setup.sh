@@ -2,7 +2,7 @@
 
 # ==========================================
 # Fail2Ban Auto-Setup für CloudPanel (Nginx)
-# Version: 1.2 (Optimized)
+# Version: 1.3 (Expanded: User + Global Logs)
 # ==========================================
 
 # Farben für Ausgabe
@@ -34,6 +34,8 @@ failregex = ^<HOST> -.*"(GET|POST|HEAD).*" (400|401|403|404|444|499|500|502|503|
             ^<HOST> -.*"POST /xmlrpc.php .*" .*$
 
 ignoreregex = 
+# Hier kannst du bei Bedarf Google Bots ausschließen, falls nötig
+# .*Googlebot.*
 EOF
 
 # 4. Jail Konfiguration
@@ -45,11 +47,16 @@ enabled  = true
 backend  = auto
 port     = http,https
 filter   = nginx-cloudpanel-dos
-# Wildcard * findet alle CloudPanel User Logs
+# Wildcard * findet alle CloudPanel User Logs UND das globale Log
 logpath  = /home/*/logs/nginx/access.log
+           /var/log/nginx/access.log
 maxretry = 5
 findtime = 60
 bantime  = 3600
+# Falls du jemals die Ban-Zeit erhöhen willst:
+# bantime = 86400  ; 1 Tag
+# bantime = 604800 ; 1 Woche
+
 action   = iptables-multiport[name=NoDos, port="http,https"]
 EOF
 
